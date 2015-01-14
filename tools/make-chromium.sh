@@ -22,4 +22,11 @@ cp platform/chromium/*.js $DES/js/
 cp platform/chromium/manifest.json $DES/
 cp LICENSE.txt $DES/
 
+if [ "$1" = all ]; then
+    echo "*** uBlock.chromium: Creating package..."
+    pushd $DES/
+    zip ../uBlock.chromium.zip -qr *
+    popd
+fi
+
 echo "*** uBlock.chromium: Package done."

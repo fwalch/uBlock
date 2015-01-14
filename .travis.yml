@@ -1,0 +1,16 @@
+sudo: false
+env:
+  matrix:
+  - BROWSER=chromium EXT=zip
+  - BROWSER=firefox EXT=xpi
+script: ./tools/make-${BROWSER}.sh all
+deploy:
+  provider: releases
+  api_key:
+    secure: jLx7SlVrbi7NkIWvcYNVp/v0dnl0uBrrmE1fM+uG+4C27c+LstrZnQTHEfOHp+UgM1UL3iLY0WVSWEhsWPVV0/QPFk9DEm79oMSDpvf0LdLHieWw78Q1mJTfRkrvMy2uE8t6ECtwAz/WKrfZArpMEB6IqNWbUQqMLzlUqjR4tM0=
+  file: dist/build/uBlock.${BROWSER}.${EXT}
+  skip_cleanup: true
+  on:
+    repo: fwalch/uBlock
+    tags: true
+    all_branches: true
