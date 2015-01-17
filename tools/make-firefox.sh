@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # This script assumes a linux environment
 
 echo "*** uBlock.firefox: Copying files"
 
 DES=dist/build/uBlock.firefox
-rm -r $DES
+rm -rf $DES
 mkdir -p $DES
 
 cp -R assets $DES/
@@ -29,8 +29,16 @@ python tools/make-firefox-meta.py $DES/
 
 if [ "$1" = all ]; then
     echo "*** uBlock.firefox: Creating package..."
+    # Get timestamp of latest commit and change
+    # files in $DES to have this timestamp.
+    timestamp="$(git log -1 --pretty=format:"%cD")"
+    find $DES/ -exec touch -d "$timestamp" {} +
+
     pushd $DES/
-    zip ../uBlock.firefox.xpi -qr *
+    rm -f ../uBlock.firefox.xpi
+    find . -type f -print |
+      sort -d -f |
+      zip -X0@ ../uBlock.firefox.xpi
     popd
 fi
 
